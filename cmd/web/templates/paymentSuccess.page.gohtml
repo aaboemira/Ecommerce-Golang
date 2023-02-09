@@ -1,0 +1,33 @@
+{{template "base" .}}
+{{define "title"}}
+    Payment Recipt
+{{end}}
+{{define "content"}}
+    <h2 class="mt-5">Payment Succeeded</h2>
+    <div class="card col-8" >
+        <div class="card-body mx-4">
+            <div class="container">
+                <p class="my-5 mx-5" style="font-size: 30px;">Thank for your purchase</p>
+                <div class="row">
+                    <ul class="list-unstyled">
+                        <li class="text-black">Name:{{index .Data "name"}}</li>
+                        <li class="text-muted mt-1"><span class="text-black">Invoice</span> {{index .Data "paymentIntent"}}</li>
+                        <li class="text-black mt-1">Email:{{index .Data "email"}}</li>
+                        <li class="text-black mt-1">Payment Method:{{index .Data "paymentMethod"}}</li>
+                    </ul>
+
+                    <hr>
+                    <div class="col-xl-10">
+                        <p>Amount</p>
+                    </div>
+                    <div class="col-xl-2">
+                        <p class="float-end">{{index .Data "paymentAmount"}} {{index .Data "paymentCurrency"}}
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{{end}}
