@@ -9,30 +9,38 @@ import (
 )
 
 type templateData struct {
-	StringMap       map[string]string
-	IntMap          map[int]int
-	FloatMap        map[string]float32
-	Data            map[string]interface{}
-	CSRF            string
-	Flash           string
-	Warning         string
-	Error           string
-	IsAuthenitcated int
-	API             string
-	cssVersion      string
+	StringMap        map[string]string
+	IntMap           map[int]int
+	FloatMap         map[string]float32
+	Data             map[string]interface{}
+	CSRF             string
+	Flash            string
+	Warning          string
+	Error            string
+	IsAuthenitcated  int
+	API              string
+	cssVersion       string
+	StripeSecretKey  string
+	StripePublishKey string
+	FileServer       string
 }
 
-var functions = template.FuncMap{}
+var functions = template.FuncMap{
+	"formatCurrency": formatCurrency,
+}
+
+func formatCurrency(currency int) string {
+	return fmt.Sprintf("$%.2f", float32(currency/100))
+}
 
 //go:embed templates
 var templateFS embed.FS
 
 func (app *application) addDefaultData(td *templateData, r *http.Request) *templateData {
 	td.API = app.config.api
-	fmt.Println("Iam here")
-	fmt.Println("Iam here")
-	fmt.Println("Iam here")
-	fmt.Println(app.config.api)
+	td.StripeSecretKey = app.config.stripe.secret
+	td.StripePublishKey = app.config.stripe.key
+	td.FileServer = fmt.Sprintf("http://localhost:%d/static/", app.config.port)
 	return td
 }
 func (app *application) renderTemplate(w http.ResponseWriter, r *http.Request, page string, td *templateData, partials ...string) error {
@@ -41,8 +49,8 @@ func (app *application) renderTemplate(w http.ResponseWriter, r *http.Request, p
 	templateToRender := fmt.Sprintf("templates/%s.page.gohtml", page)
 
 	_, templateInMap := app.templateCache[templateToRender]
-	fmt.Println(td.StringMap)
-	fmt.Println(td)
+	//fmt.Println(td.StringMap)
+	//fmt.Println(td)
 
 	if app.config.env == "production" && templateInMap {
 		t = app.templateCache[templateToRender]

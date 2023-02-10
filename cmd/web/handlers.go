@@ -1,13 +1,14 @@
 package main
 
 import (
+	"Ecommerce/internal/models"
 	"net/http"
 )
 
 func (app *application) VirtualTerminal(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]string)
 	data["StripeKey"] = app.config.stripe.key
-	if err := app.renderTemplate(w, r, "terminal", &templateData{StringMap: data}); err != nil {
+	if err := app.renderTemplate(w, r, "terminal", &templateData{StringMap: data}, "stripe-js"); err != nil {
 		app.errorLog.Println(err)
 	}
 }
@@ -28,5 +29,18 @@ func (app *application) PaymentSuccess(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.errorLog.Println(err)
 	}
+}
 
+func (app *application) OrderPage(w http.ResponseWriter, r *http.Request) {
+	fidgets := &models.Item{ID: 1, Name: "Fidget Spinner", Description: "Fidget spinner for kids", InventoryLevel: 100, Price: 1000}
+	data := make(map[string]interface{})
+	data["price"] = fidgets.Price
+	data["name"] = fidgets.Name
+	data["Description"] = fidgets.Description
+	data["Inventory"] = fidgets.InventoryLevel
+	data["id"] = fidgets.ID
+
+	if err := app.renderTemplate(w, r, "order", &templateData{Data: data}, "stripe-js"); err != nil {
+		app.errorLog.Println(err)
+	}
 }
