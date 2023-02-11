@@ -3,6 +3,7 @@ package main
 import (
 	"Ecommerce/internal/cards"
 	"encoding/json"
+	"github.com/go-chi/chi/v5"
 	"net/http"
 	"strconv"
 )
@@ -62,4 +63,20 @@ func (app *application) GetPaymentIntent(w http.ResponseWriter, r *http.Request)
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(out)
 	}
+}
+func (app *application) getItemByID(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	itemID, _ := strconv.Atoi(id)
+	item, err := app.DB.GetItem(itemID)
+	if err != nil {
+		app.errorLog.Println(err)
+		return
+	}
+	out, err := json.MarshalIndent(item, "", "  ")
+	if err != nil {
+		app.errorLog.Println(err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }

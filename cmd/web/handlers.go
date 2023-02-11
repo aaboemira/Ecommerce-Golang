@@ -34,11 +34,7 @@ func (app *application) PaymentSuccess(w http.ResponseWriter, r *http.Request) {
 func (app *application) OrderPage(w http.ResponseWriter, r *http.Request) {
 	fidgets := &models.Item{ID: 1, Name: "Fidget Spinner", Description: "Fidget spinner for kids", InventoryLevel: 100, Price: 1000}
 	data := make(map[string]interface{})
-	data["price"] = fidgets.Price
-	data["name"] = fidgets.Name
-	data["Description"] = fidgets.Description
-	data["Inventory"] = fidgets.InventoryLevel
-	data["id"] = fidgets.ID
+	data["item"] = fidgets
 
 	if err := app.renderTemplate(w, r, "order", &templateData{Data: data}, "stripe-js"); err != nil {
 		app.errorLog.Println(err)

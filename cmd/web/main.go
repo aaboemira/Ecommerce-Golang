@@ -2,6 +2,7 @@ package main
 
 import (
 	"Ecommerce/internal/driver"
+	"Ecommerce/internal/models"
 	"flag"
 	"fmt"
 	"html/template"
@@ -33,6 +34,7 @@ type application struct {
 	errorLog      *log.Logger
 	templateCache map[string]*template.Template
 	version       string
+	DB            models.DBModel
 }
 
 func (app *application) serve() error {
