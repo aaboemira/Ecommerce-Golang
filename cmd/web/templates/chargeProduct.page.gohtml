@@ -1,0 +1,71 @@
+{{template "base".}}
+{{define "title"}}Buy Product{{end}}
+{{define "content"}}
+    {{$item:=index .Data "item"}}
+    <section style="background-color: #f9c9aa;">
+
+        <div class="container py-5">
+            <div class="alert alert-danger text-center d-none" id="card-messages"></div>
+
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5">
+                    <div class="card">
+                        <img src="{{.FileServer}}{{$item.Image}}.png"
+                             class="" alt="Black Chair" width="50%" height="150px"/>
+                        <div class="card-body">
+                            <div class="card-title d-flex justify-content-between mb-0">
+                                <p class="text-muted mb-0">{{$item.Name}}</p>
+                                <p class="mb-0">{{formatCurrency $item.Price}}</p>
+                            </div>
+                        </div>
+                        <div class="rounded-bottom" style="background-color: #eee;">
+                            <form action="/payment-succeeded" method="post"
+                                  name="charge_form" id="charge_form"
+                                  class="d-block needs-validation charge-form"
+                                  autocomplete="off" novalidated="">
+                                <div class="form-outline">
+                                    <label class="form-label" for="cardholder-name">Cardholder's Name</label>
+
+                                    <input type="text" class="form-control" id="cardholder-name" name="cardholder-name"
+                                           required="" autocomplete="cardholder-name-new">
+                                </div>
+
+
+                                <div class="form-outline">
+                                    <label for="cardholder-email" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="cardholder-email"
+                                           name="cardholder-email"
+                                           required="" autocomplete="cardholder-email-new">
+                                </div>
+                                <div class="form-outline">
+                                    <label for="card-element" class="form-label">Credit Card</label>
+                                    <div id="card-element" class="form-control"></div>
+                                    <div class="alert-danger text-center" id="card-errors" role="alert"></div>
+                                    <div class="alert-success text-center" id="card-sucess" role="alert"></div>
+                                </div>
+
+                                <div class="card-body">
+                                    <p class="mb-4">Your payment details</p>
+                                    <div id="processing-payment" class="spinner-border d-none" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <input type="hidden" name="payment_intent" id="payment_intent">
+                                    <input type="hidden" name="payment_method" id="payment_method">
+                                    <input type="hidden" name="payment_amount" id="payment_amount">
+                                    <input type="hidden" name="payment_currency" id="payment_currency">
+                                    <input type="hidden" class="form-control" id="amount" name="amount" value="{{$item.Price}}">
+                                    <a id="pay-button" href="javascript:void(0)" class="btn btn-info btn-lg btn-rounded"
+                                       onclick="val()">Charge card</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{{end}}
+{{define "js"}}
+    {{template "stripe-js" .}}
+
+{{end}}

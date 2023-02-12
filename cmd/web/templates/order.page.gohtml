@@ -4,64 +4,150 @@
 {{end}}
 
 {{define "content"}}
-    {{$item := index .Data "item"}}
 
     <section style="background-color: #eee;">
         <div class="container py-5">
             <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-6 col-xl-4">
-                    <div class="card" style="border-radius: 15px;">
-                        <form action="/payment-succeeded" method="post"
-                              name="charge_form" id="charge_form"
-                              class="d-block needs-validation charge-form"
-                              autocomplete="off" novalidated="">
-                            <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light"
-                                 data-mdb-ripple-color="light">
-                                <img src="{{.FileServer}}widgets.png"
-                                     style="border-top-left-radius: 15px; border-top-right-radius: 15px;"
-                                     class="img-fluid"
-                                     alt="Laptop"/>
-                                <a href="#!">
-                                    <div class="mask"></div>
-                                </a>
-                            </div>
-                            <div class="card-body pb-0">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <p><a href="#!" class="text-dark">{{$item.Name}}</a></p>
-                                        <p class="small text-muted">{{$item.Description}}</p>
-                                    </div>
-                                    <div>
-                                        <div class="d-flex flex-row justify-content-end mt-1 mb-4 text-danger">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
+                {{$products := index .Data "products"}}
+                {{range $index, $item := $products}}
+                    <div class="col-md-4 col-lg-4 col-xl-4">
+                        <form class="needs-validation" id="prd_{{$item.ID}}_form" name="prd_{{$item.ID}}_form" autocomplete="off" novalidated="">
+                            <div id="product-{{$item.ID}}" class="card" style="border-radius: 15px;">
+                                <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light"
+                                     data-mdb-ripple-color="light">
+                                    <img src="{{$.FileServer}}{{$item.Image}}.png"
+                                         style="border-top-left-radius: 15px; border-top-right-radius: 15px;"
+                                         class="img-fluid"
+                                         alt="Laptop"/>
+                                    <a href="#!">
+                                        <div class="mask"></div>
+                                    </a>
+                                </div>
+                                <div class="card-body pb-0">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <p><a href="#!" class="text-dark">{{$item.Name}}</a></p>
+                                            <p class="small text-muted">{{$item.Description}}</p>
                                         </div>
-                                        <p class="small text-muted">Rated 4.0/5</p>
+                                        <div>
+                                            <div class="d-flex flex-row justify-content-end mt-1 mb-4 text-danger">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <p class="small text-muted">Rated 4.0/5</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr class="my-0"/>
-                            <div class="card-body pb-0">
-                                <div class="d-flex justify-content-between">
-                                    <p><a href="#!" class="text-dark">Price:</a></p>
-                                    <p class="text-dark">{{ formatCurrency $item.Price}}</p>
+                                <div class="card-body pb-0">
+                                    <div class="d-flex justify-content-between">
+                                        <p><a href="#!" class="text-dark">Price:</a></p>
+                                        <p class="text-dark">{{ formatCurrency $item.Price}}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <hr class="my-0"/>
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center pb-2 mb-1">
-                                    <a href="#!" class="text-dark fw-bold">Cancel</a>
-                                    <button type="button" class="btn btn-primary">Buy now</button>
+                                <hr class="my-0"/>
+                                <div class="card-body">
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="input-group">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="product_quantity">Quantity</label>
+                                            <input type="text" class="form-control" id="product_{{$item.ID}}_qty"
+                                                   name="product_{{$item.ID}}_qty"
+                                                   required="" autocomplete="cardholder-name-new">
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center pb-2 mb-1">
+                                            <a href="#!" class="text-dark fw-bold">Cancel</a>
+                                            <a id="add-button" href="javascript:void(0)"
+                                               class="btn btn-info btn-lg btn-rounded"
+                                               onclick="val({{$item.ID}})">Add to cart</a>
+                                        </div>
+                                        <input type="hidden" id="product_{{$item.ID}}_id" name="product_{{$item.ID}}_id" value="{{$item.ID}}">
+                                        <input type="hidden" id="product_{{$item.ID}}_price" name="product_{{$item.ID}}_price" value="{{$item.Price}}">
+                                        <input type="hidden" id="product_{{$item.ID}}_totalQuantity" name="product_{{$item.ID}}_totalQuantity" value="{{$item.InventoryLevel}}">
+                                    </div>
                                 </div>
                             </div>
                         </form>
                     </div>
-                </div>
+                {{end}}
             </div>
         </div>
     </section>
+        <div id="shopping-cart">
+            <form method="POST" action="/checkout">
+                <h2>there is no items in the shopping cart</h2>
+                <table id="cartTable" class="table d-none">
+                </table>
+                <hr>
+                <a id="pay-button" href="javascript:void(0)" class="btn btn-info btn-lg btn-rounded"
+                   onclick="proceedToCheckout()">Proceed To checkout</a>
+            </form>
+        </div>
+
 {{end}}
 {{define "js"}}
+    <script>
+        let productsArr=[]
+        function val(id) {
+            let form = document.getElementById(`prd_${id}_form`);
+            if (form.checkValidity() === false) {
+                this.event.preventDefault();
+                this.event.stopPropagation();
+                form.classList.add("was-validated");
+                return;
+            }
+            form.classList.add("was-validated");
+            let prd_id = document.getElementById(`product_${id}_id`).value
+            let prd_price = document.getElementById(`product_${id}_price`).value
+            let prd_quantity = document.getElementById(`product_${id}_qty`).value
+            let totalQuantity = document.getElementById(`product_${id}_totalQuantity`).value
+            let prd=[]
+            prd["id"] = prd_id;
+            prd["price"] = prd_price;
+            prd["quantity"] = prd_quantity;
+            prd["totalPrice"]=prd_price*prd_quantity
+            console.log(prd)
+            productsArr.push(prd)
+            addNewPrd(prd)
+            if (productsArr.length==1) {
+                let shoppingCart = document.getElementById("shopping-cart")
+                shoppingCart.getElementsByTagName("h2")[0].remove()
+                shoppingCart.getElementsByTagName("table")[0].classList.remove("d-none")
+                document.getElementById("checkout").classList.remove("d-none")
+            }
+        }
+        function addNewPrd(prd){
+                let product=`
+                            <tr>
+                              <th >${prd["id"]}</th>
+                              <th >${prd["price"]}</th>
+                              <th >${prd["quantity"]}</th>
+                              <th >${prd["totalPrice"]}</th>
+                            </tr>`
+
+            let table=document.getElementById("cartTable")
+            table.innerHTML+=product;
+        }
+        function proceedToCheckout(){
+            console.log(productsArr)
+            let payload={
+                products:productsArr,
+                currency:'EGP'
+            }
+            console.log(payload)
+            console.log(JSON.stringify(payload))
+            const requestOptions={
+                method:'post',
+                headers:{
+                    'Accept':'application/json',
+                    'Content-Type':'application/json',
+                },
+                body:JSON.stringify(payload)
+            }
+            fetch("/checkout",requestOptions)
+        }
+    </script>
 {{end}}

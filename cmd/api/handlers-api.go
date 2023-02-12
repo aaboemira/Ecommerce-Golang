@@ -3,6 +3,7 @@ package main
 import (
 	"Ecommerce/internal/cards"
 	"encoding/json"
+	"fmt"
 	"github.com/go-chi/chi/v5"
 	"net/http"
 	"strconv"
@@ -77,6 +78,21 @@ func (app *application) getItemByID(w http.ResponseWriter, r *http.Request) {
 		app.errorLog.Println(err)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
+}
+func (app *application) getAllProducts(w http.ResponseWriter, r *http.Request) {
+	items, err := app.DB.GetAllItems()
+	if err != nil {
+		app.errorLog.Println(err)
+		return
+	}
+	out, err := json.MarshalIndent(items, "", "  ")
+	if err != nil {
+		app.errorLog.Println(err)
+		return
+	}
+	fmt.Println(items)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
 }
