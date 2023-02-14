@@ -18,44 +18,67 @@
                                 <p class="mb-0">{{formatCurrency $item.Price}}</p>
                             </div>
                         </div>
+
                         <div class="rounded-bottom" style="background-color: #eee;">
                             <form action="/payment-succeeded" method="post"
                                   name="charge_form" id="charge_form"
                                   class="d-block needs-validation charge-form"
                                   autocomplete="off" novalidated="">
-                                <div class="form-outline">
-                                    <label class="form-label" for="cardholder-name">Cardholder's Name</label>
-
-                                    <input type="text" class="form-control" id="cardholder-name" name="cardholder-name"
-                                           required="" autocomplete="cardholder-name-new">
-                                </div>
-
-
-                                <div class="form-outline">
-                                    <label for="cardholder-email" class="form-label">Email</label>
-                                    <input type="text" class="form-control" id="cardholder-email"
-                                           name="cardholder-email"
-                                           required="" autocomplete="cardholder-email-new">
-                                </div>
-                                <div class="form-outline">
-                                    <label for="card-element" class="form-label">Credit Card</label>
-                                    <div id="card-element" class="form-control"></div>
-                                    <div class="alert-danger text-center" id="card-errors" role="alert"></div>
-                                    <div class="alert-success text-center" id="card-sucess" role="alert"></div>
-                                </div>
-
-                                <div class="card-body">
-                                    <p class="mb-4">Your payment details</p>
-                                    <div id="processing-payment" class="spinner-border d-none" role="status">
-                                        <span class="sr-only">Loading...</span>
+                                <div class="container px-2 py-2">
+                                    <div class="form-outline">
+                                        <label for="qty" class="form-label">Quantity</label>
+                                        <input class="col-3" type="number" class="form-control" id="qty"
+                                               name="qty"
+                                               required="" autocomplete="qty-new">
                                     </div>
-                                    <input type="hidden" name="payment_intent" id="payment_intent">
-                                    <input type="hidden" name="payment_method" id="payment_method">
-                                    <input type="hidden" name="payment_amount" id="payment_amount">
-                                    <input type="hidden" name="payment_currency" id="payment_currency">
-                                    <input type="hidden" class="form-control" id="amount" name="amount" value="{{$item.Price}}">
-                                    <a id="pay-button" href="javascript:void(0)" class="btn btn-info btn-lg btn-rounded"
-                                       onclick="val()">Charge card</a>
+                                    <div class="form-outline">
+                                        <label class="form-label" for="first-name">First Name</label>
+                                        <input type="text" class="form-control" id="first-name" name="first-name"
+                                               required="" autocomplete="first-name-new">
+                                    </div>
+                                    <div class="form-outline">
+                                        <label class="form-label" for="last-name">Last Name</label>
+                                        <input type="text" class="form-control" id="last-name" name="last-name"
+                                               required="" autocomplete="last-name-new">
+                                    </div>
+
+                                    <div class="form-outline">
+                                        <label for="cardholder-email" class="form-label">Email</label>
+                                        <input type="text" class="form-control" id="email"
+                                               name="email"
+                                               required="" autocomplete="cardholder-email-new">
+                                    </div>
+
+                                    <div class="form-outline">
+                                        <label class="form-label" for="cardholder-name">Card on Name</label>
+                                        <input type="text" class="form-control" id="cardholder-name"
+                                               name="cardholder-name"
+                                               required="" autocomplete="cardholder-name-new">
+                                    </div>
+
+
+                                    <div class="form-outline">
+                                        <label for="card-element" class="form-label">Credit Card</label>
+                                        <div id="card-element" class="form-control"></div>
+                                        <div class="alert-danger text-center" id="card-errors" role="alert"></div>
+                                        <div class="alert-success text-center" id="card-sucess" role="alert"></div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div id="processing-payment" class="spinner-border d-none" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        <input type="hidden" name="payment_intent" id="payment_intent">
+                                        <input type="hidden" name="payment_method" id="payment_method">
+                                        <input type="hidden" name="payment_amount" id="payment_amount">
+                                        <input type="hidden" name="payment_currency" id="payment_currency">
+                                        <input type="hidden" id="amount" name="amount" value="{{$item.Price}}">
+                                        <input type="hidden" name="item_id" id="item_id" value="{{$item.ID}}">
+
+                                        <a id="pay-button" href="javascript:void(0)"
+                                           class="btn btn-info btn-lg btn-rounded"
+                                           onclick="val()">Charge card</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>

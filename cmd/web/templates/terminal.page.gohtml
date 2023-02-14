@@ -28,9 +28,9 @@
 
 
                                 <div class="form-outline">
-                                    <label class="form-label" for="amount">Amount to pay</label>
-                                    <input type="text" class="form-control" id="amount" name="amount"
-                                           required="" autocomplete="amount-new">
+                                    <label class="form-label" for="charge_amount">Amount to pay</label>
+                                    <input type="text" class="form-control" id="charge_amount"
+                                           required="" autocomplete="charge_amount-new"  onchange="myFunction(this)">
                                 </div>
 
                                 <div class="form-outline">
@@ -55,6 +55,8 @@
                                 <input type="hidden" name="payment_method" id="payment_method">
                                 <input type="hidden" name="payment_amount" id="payment_amount">
                                 <input type="hidden" name="payment_currency" id="payment_currency">
+                                <input type="hidden" name="amount" id="amount">
+
                             </form>
                         </div>
                     </div>
@@ -65,5 +67,10 @@
 {{end}}
 
 {{define "js"}}
+    <script>
+      function  myFunction(test){
+            document.getElementById("amount").value = test.value * 100;
+        }
+    </script>
 {{template "stripe-js" .}}
 {{end}}

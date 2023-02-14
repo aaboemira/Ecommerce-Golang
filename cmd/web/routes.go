@@ -6,7 +6,10 @@ import (
 )
 
 func (app *application) routes() http.Handler {
+
 	mux := chi.NewRouter()
+	mux.Use(SessionLoad)
+	mux.Get("/", app.appHome)
 	mux.Get("/virtual-terminal", app.VirtualTerminal)
 	mux.Get("/order/{id}", app.ChargeProduct)
 	mux.Get("/shop", app.ProductsPageHandler)

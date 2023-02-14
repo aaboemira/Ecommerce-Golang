@@ -14,6 +14,9 @@
                         <li class="text-muted mt-1"><span class="text-black">Invoice</span> {{index .Data "paymentIntent"}}</li>
                         <li class="text-black mt-1">Email:{{index .Data "email"}}</li>
                         <li class="text-black mt-1">Payment Method:{{index .Data "paymentMethod"}}</li>
+                        <li class="text-black mt-1">LastFour:{{index .Data "lastFour"}}</li>
+                        <li class="text-black mt-1">Expiry date:{{index .Data "expMonth"}}/{{index .Data "expYear"}}</li>                        <li class="text-black mt-1">Email:{{index .Data "email"}}</li>
+                        <li class="text-black mt-1">Return code:{{index .Data "bankCode"}}</li>
                     </ul>
 
                     <hr>

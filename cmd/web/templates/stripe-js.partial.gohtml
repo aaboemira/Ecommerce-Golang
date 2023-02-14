@@ -43,9 +43,12 @@
         }
         form.classList.add("was-validated");
         hidePayButton();
-        let amountToCharge=String(parseFloat(document.getElementById("amount").value)*100)
+        let amount=document.getElementById("amount").value
+        let quantity=document.getElementById("qty").value
+        let amountToCharge= quantity * amount
+        console.log(typeof (amountToCharge))
         let payload={
-            amount:amountToCharge,
+            amount:amountToCharge.toString(),
             currency:'EGP'
         }
         const requestOptions={
@@ -76,7 +79,7 @@
                             showPayButtons();
                         }else if(result.paymentIntent){
                             if (result.paymentIntent.status==="succeeded"){
-                                document.getElementById("payment_method").value=result.paymentIntent.payment_method_types[0]
+                                document.getElementById("payment_method").value=result.paymentIntent.payment_method
                                 document.getElementById("payment_intent").value=result.paymentIntent.id;
                                 document.getElementById("payment_amount").value=result.paymentIntent.amount;
                                 document.getElementById("payment_currency").value=result.paymentIntent.currency;

@@ -16,6 +16,13 @@ func (app *application) routes() http.Handler {
 		MaxAge:           300,
 	}))
 	mux.Post("/api/payment-intent", app.GetPaymentIntent)
+
+	mux.Post("/api/customers", app.createCustomer)
+
+	mux.Post("/api/orders", app.createOrder)
+
+	mux.Post("/api/transactions", app.createTransaction)
+
 	mux.Get("/api/getItem/{id}", app.getItemByID)
 	mux.Get("/api/products", app.getAllProducts)
 

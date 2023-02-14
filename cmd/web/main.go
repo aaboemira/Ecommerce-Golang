@@ -5,6 +5,7 @@ import (
 	"Ecommerce/internal/models"
 	"flag"
 	"fmt"
+	"github.com/alexedwards/scs/v2"
 	"html/template"
 	"log"
 	"net/http"
@@ -14,6 +15,8 @@ import (
 
 const version = "1.0.0"
 const cssVersion = "1"
+
+var sessionManager *scs.SessionManager
 
 type config struct {
 	port int
@@ -35,6 +38,7 @@ type application struct {
 	templateCache map[string]*template.Template
 	version       string
 	DB            models.DBModel
+	Session       *scs.SessionManager
 }
 
 func (app *application) serve() error {
@@ -52,6 +56,8 @@ func (app *application) serve() error {
 }
 func main() {
 
+	sessionManager = scs.New()
+	sessionManager.Lifetime = 24 * time.Hour
 	var cfg config
 	flag.IntVar(&cfg.port, "port", 4000, "Server port listen on ")
 	flag.StringVar(&cfg.env, "env", "development", "Application environment {development|production} ")
@@ -77,7 +83,9 @@ func main() {
 		infoLog:       infoLog,
 		templateCache: tc,
 		errorLog:      errorLog,
-		version:       version}
+		version:       version,
+		Session:       sessionManager,
+	}
 	err = app.serve()
 
 	if err != nil {
