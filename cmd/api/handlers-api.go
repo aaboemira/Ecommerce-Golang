@@ -26,6 +26,7 @@ func (app *application) GetPaymentIntent(w http.ResponseWriter, r *http.Request)
 	var payload stripePayload
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
+
 		app.errorLog.Println(err)
 	}
 	amount, err := strconv.Atoi(payload.Amount)
